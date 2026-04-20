@@ -10,11 +10,14 @@ contract AetherNFT is ERC721URIStorage, Ownable {
     Counters.Counter private _tokenIds;
 
     address public marketAddress;
+    uint96 public royaltyFeesInBips = 500; // 5% royalties
+    address public royaltyArtist;
 
     event NFTMinted(uint256 indexed tokenId, string tokenURI, address owner);
 
     constructor(address _marketAddress) ERC721("Aetherial NFTs", "AETHER") Ownable(msg.sender) {
         marketAddress = _marketAddress;
+        royaltyArtist = msg.sender;
     }
 
     function mintNFT(string memory _tokenURI) public returns (uint256) {
@@ -31,5 +34,13 @@ contract AetherNFT is ERC721URIStorage, Ownable {
 
     function getCurrentTokenId() public view returns (uint256) {
         return _tokenIds.current();
+    }
+
+    function setRoyaltyArtist(address _artist) public onlyOwner {
+        royaltyArtist = _artist;
+    }
+
+    function setRoyaltyFeesInBips(uint96 _fees) public onlyOwner {
+        royaltyFeesInBips = _fees;
     }
 }
