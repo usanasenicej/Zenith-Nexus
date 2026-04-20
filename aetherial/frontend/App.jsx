@@ -35,7 +35,12 @@ function App() {
   ];
 
   useEffect(() => {
-    setNfts(demoNFTs);
+    setLoading(true);
+    // Simulating blockchain fetch delay
+    setTimeout(() => {
+      setNfts(demoNFTs);
+      setLoading(false);
+    }, 1500);
   }, []);
 
   return (
@@ -60,21 +65,33 @@ function App() {
         </section>
 
         <div className="nft-grid">
-          {nfts.map((nft) => (
-            <div key={nft.id} className="nft-card animate-fade">
-              <img src={nft.image} alt={nft.name} className="nft-image" />
-              <div className="nft-info">
-                <h3 className="nft-title">{nft.name}</h3>
-                <div className="nft-price-tag">
-                  <div className="price-box">
-                    <span className="price-label">Current Price</span>
-                    <span className="price-value">{nft.price}</span>
-                  </div>
-                  <button className="buy-btn">Buy Now</button>
+          {loading ? (
+            Array(3).fill(0).map((_, i) => (
+              <div key={i} className="nft-card skeleton" style={{height: '400px', opacity: 0.5}}>
+                <div style={{width: '100%', height: '300px', background: 'var(--glass-border)'}}></div>
+                <div style={{padding: '1rem'}}>
+                  <div style={{width: '60%', height: '20px', background: 'var(--glass-border)', marginBottom: '10px'}}></div>
+                  <div style={{width: '40%', height: '20px', background: 'var(--glass-border)'}}></div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            nfts.map((nft) => (
+              <div key={nft.id} className="nft-card animate-fade">
+                <img src={nft.image} alt={nft.name} className="nft-image" />
+                <div className="nft-info">
+                  <h3 className="nft-title">{nft.name}</h3>
+                  <div className="nft-price-tag">
+                    <div className="price-box">
+                      <span className="price-label">Current Price</span>
+                      <span className="price-value">{nft.price}</span>
+                    </div>
+                    <button className="buy-btn">Buy Now</button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </main>
 
